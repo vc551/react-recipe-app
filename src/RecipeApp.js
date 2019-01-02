@@ -31,9 +31,9 @@ class RecipeApp extends Component {
           img: "avocado_toast.jpg"
         }
       ],
-      nextRecipeId: 3
+      nextRecipeId: 3,
+      showForm:false
     }
-
     this.handleSave = this.handleSave.bind(this);
   }
 
@@ -42,15 +42,21 @@ class RecipeApp extends Component {
       const newRecipe = {...recipe,id:this.state.nextRecipeId};
       return{
         nextRecipeId: prevState.nextRecipeId++,
-        recipes:[...this.state.recipes,newRecipe]
+        recipes:[...this.state.recipes,newRecipe],
+        showForm:false
       }
     })
   }
   render() {
+    const {showForm} = this.state;
     return (
       <div className="RecipeApp">
-        <Navbar />
-        <RecipeInput onSave={this.handleSave}/>
+        <Navbar onNewRecipe={()=>this.setState({showForm:!showForm})} />
+        {showForm ? 
+          <RecipeInput 
+            onSave={this.handleSave}
+            onClose={()=>this.setState({showForm:false})}
+            /> : null}
         <RecipeList recipes={this.state.recipes}/>
       </div>
     );
